@@ -1,0 +1,645 @@
+package juntos.todo.es.posible;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import javax.swing.JOptionPane;
+
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.Augmenter;
+
+public class ToolsWeb  {
+	
+	public static void timeUp(int x) {
+		int y = x * 1000;
+        try {
+			Thread.sleep(y);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			
+			e.printStackTrace();
+		}
+	}
+
+	public static void contadorGeneralFam5(WebDriver driver,String ruta, String raiz, String ubicacion) {
+		//bloque para obtener contador general - cuadro de rizal
+        driver.switchTo().defaultContent();
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(1)")));
+        driver.findElement(By.cssSelector("#COUNTER-anchor")).click();
+        
+        
+        try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			
+			e.printStackTrace();
+		}
+        
+        //driver.switchTo().defaultContent();
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(3)")));
+        String contadorGeneral = driver.findElement(By.cssSelector("body > table:nth-child(6) > tbody")).getText();
+        String contadorColor = driver.findElement(By.cssSelector("#TotalFullColor")).getText();
+        String contadorBicolor = driver.findElement(By.cssSelector("#TotalFullColor")).getText();
+        String contadorNegro = driver.findElement(By.cssSelector("#TotalBlackColor")).getText();
+        long totalContador = Long.parseLong(contadorColor) + Long.parseLong(contadorBicolor) + Long.parseLong(contadorNegro);
+        Tools.screenShooter(driver, ruta, ubicacion + "_" + Tools.mesYearActual());
+        Tools.makeTxtTwo(ruta, ubicacion, contadorGeneral);
+        String[] encabezado = new String[]{"Departamento", "Fecha Contador Inicial" , "Contador Inicial Color", "Contador Inicial Negro", "Fecha Contador Final", "Contador Final Color", "Contador Final Negro", "Total"};
+        String[] data = new String[]{ubicacion, "2" , "3", "4", Tools.fechaActual(), contadorColor, contadorNegro, "8"};
+        
+        File testFile = new File(System.getProperty("user.home") + "\\Desktop" + "\\" + raiz + "\\", "CuadroGeneral_" + Tools.mesYearActual() + ".xls");
+        
+        if(!testFile.exists()) {
+        	Tools.CreateExcel(System.getProperty("user.home") + "\\Desktop" + "\\" + raiz + "\\", "CuadroGeneral_" + Tools.mesYearActual() + ".xls", encabezado, data);	
+        }else if(testFile.exists()) {
+        	Tools.OverwriteExcel(System.getProperty("user.home") + "\\Desktop" + "\\" + raiz + "\\", "CuadroGeneral_" + Tools.mesYearActual() + ".xls", data);
+        }
+        
+        //JOptionPane.showMessageDialog(null, contadorGeneral);
+	}
+	
+	
+	public static void loginTopAccess(WebDriver driver) {
+		driver.switchTo().defaultContent();
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(1)")));
+        driver.findElement(By.cssSelector("#tblTitle > tbody > tr.clsBackYellow > td.clsDeviceStatusLink > a")).click();
+        
+        try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			
+			e.printStackTrace();
+		}
+        
+        //como sendkey con javascript
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(1)")));
+        driver.findElement(By.cssSelector("#UserNameID > td:nth-child(3) > input[type=text]")).sendKeys("ADMIN");
+        driver.findElement(By.cssSelector("#PassWordID > td:nth-child(3) > input[type=password]")).sendKeys("123456");
+        driver.findElement(By.cssSelector("#LoginBtnID > td:nth-child(3) > input[type=button]")).click();
+        
+        //tiempo final de espera para la siguiente instruccion
+        
+        try {
+   			Thread.sleep(5000);
+   		} catch (InterruptedException e) {
+   			// TODO Auto-generated catch block
+   			
+   			e.printStackTrace();
+   		}
+        Logan.defaultLog("Logeado con exito");
+	}
+	
+	public static void topMenuGestionDeUsuario(WebDriver driver) {
+        driver.switchTo().defaultContent();
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(1)")));
+        driver.findElement(By.cssSelector("#USERMGMT-anchor")).click();	
+        Logan.defaultLog("Accedio a topMenu Gestion De Usuario");
+        
+        
+        try {
+   			Thread.sleep(5000);
+   		} catch (InterruptedException e) {
+   			// TODO Auto-generated catch block
+   			
+   			e.printStackTrace();
+   		}
+	}
+	
+	public static void subMenuGestionDeDeptos(WebDriver driver) {
+		driver.switchTo().defaultContent();
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        //driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(1)")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("#SubMenu")));
+        driver.findElement(By.cssSelector("#DeptMgmt")).click();	
+        Logan.defaultLog("Accedio a subMenu Gestion De Departamentos");
+        
+
+        try {
+   			Thread.sleep(5000);
+   		} catch (InterruptedException e) {
+   			// TODO Auto-generated catch block
+   			
+   			e.printStackTrace();
+   		}
+	}
+	
+	
+	public static void topMenuContador(WebDriver driver) {
+		driver.switchTo().defaultContent();
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(1)")));
+        driver.findElement(By.cssSelector("#COUNTER-anchor")).click();	
+        Logan.defaultLog("Accedio a topMenu Contador(general)");
+        
+
+        try {
+   			Thread.sleep(5000);
+   		} catch (InterruptedException e) {
+   			// TODO Auto-generated catch block
+   			
+   			e.printStackTrace();
+   		}
+	}
+	
+	
+	public static void topMenuContador2505ac(WebDriver driver) {
+	     try {
+	   			Thread.sleep(5000);
+	   		} catch (InterruptedException e) {
+	   			// TODO Auto-generated catch block
+	   			
+	   			e.printStackTrace();
+	   		}
+	     
+		driver.switchTo().defaultContent();
+        //driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset:nth-child(2) > frame:nth-child(1)")));
+        //driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset:nth-child(2) > frame:nth-child(1)")));
+		driver.switchTo().frame(driver.findElement(By.name("TopLevelFrame")));
+		driver.switchTo().frame(driver.findElement(By.name("topframe")));
+        driver.findElement(By.cssSelector("#COUNTER-anchor")).click();	
+        Logan.defaultLog("Accedio a topMenu Contador(general)");
+        
+
+        try {
+   			Thread.sleep(5000);
+   		} catch (InterruptedException e) {
+   			// TODO Auto-generated catch block
+   			
+   			e.printStackTrace();
+   		}
+	}
+	
+	public static int numeroDeUsuariosFam5(WebDriver driver) {
+		int numero = 0;
+		//Necesita haberse ubicado en Login > Gestion de usarios > Gestion de departamentos 
+        driver.switchTo().defaultContent();
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(3)")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(2)")));
+		
+        //obtiene toda la tabla de los usuarios
+        String rowTable  = driver.findElement(By.cssSelector("#DynTable > table")).getText();
+
+        
+        String sCadena = rowTable;
+        char[] aCaracteres = sCadena.toCharArray();
+        int conter = 0;
+        for(char l :  aCaracteres) {
+        	if(l == '\n') {
+        		conter = conter + 1;
+        	}
+        }
+        
+        numero = conter;
+        conter = conter -1;
+        Logan.defaultLog("Numero de usuarios: " + conter);
+		return numero;
+		
+	}
+	
+	public static String nombreGestionDeptosFam5(WebDriver driver,int num) {
+		String nombre = null;
+	
+		try {
+			driver.switchTo().defaultContent();
+	        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+	        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(3)")));
+	        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(2)")));
+	        //driver.findElement(By.cssSelector("#DynTable > table > tbody > tr:nth-child(2) > td:nth-child(2) > a")).click();	
+	       
+	         nombre = driver.findElement(By.cssSelector("#DynTable > table > tbody > tr:nth-child(" + num + ") > td:nth-child(2) > a")).getText();
+	        
+			
+		}catch(NoSuchElementException nse) {
+			Logan.defaultLog("No se obtuvo nombre");
+		}
+			return nombre;
+			
+	}
+	
+	public static void tablaGestionDeptosForFam5(WebDriver driver) {
+		int ult = numeroDeUsuariosFam5(driver);
+		
+        driver.switchTo().defaultContent();
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(3)")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(2)")));
+        
+		for (int i = 2;i <= ult;i++) {
+			String contador = driver.findElement(By.cssSelector("#DynTable > table > tbody > tr:nth-child(" + i + ") > td:nth-child(3)")).getText();
+	        String nombreUsuario = driver.findElement(By.cssSelector("#DynTable > table > tbody > tr:nth-child(" + i + ") > td:nth-child(2) > a")).getText();
+	        Tools.makeDir("TESTEO");
+	        Tools.makeTxt("TESTEO", "FOR", nombreUsuario + "----->" + contador);
+		}
+		Logan.defaultLog("Se accedio al contador de Gestion de Departamentos");
+	}
+	
+	
+	public static String tablaGestionDeptosVarFam5(WebDriver driver) {
+        String rowTable  = driver.findElement(By.cssSelector("#DynTable > table")).getText();
+        //Tools.makeDir("TESTEO");
+        //Tools.makeTxt("TESTEO", "P1", rowTable);
+        return rowTable;
+	}
+	
+	
+	public static void seleccionarDepartamentoFam5(WebDriver driver, int num) {
+		//100% funcional - en esta familia los departamentos inician desde el 2
+        try {
+   			Thread.sleep(5000);
+   		} catch (InterruptedException e) {
+   			// TODO Auto-generated catch block
+   			
+   			e.printStackTrace();
+   		}
+        
+        driver.switchTo().defaultContent();
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(3)")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(2)")));
+        
+        driver.findElement(By.cssSelector("#DynTable > table > tbody > tr:nth-child(" + num + ") > td:nth-child(2) > a")).click();
+        Set<String> handlesSet = driver.getWindowHandles();
+        List<String> handlesList = new ArrayList<String>(handlesSet);
+        driver.switchTo().window(handlesList.get(1));
+	}
+	
+	public static int numeroDeUsuariosFam4505ac(WebDriver driver) {
+		int numero = 0;
+        driver.switchTo().defaultContent();
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(3)")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(2)")));
+        
+        String rowTable  = driver.findElement(By.cssSelector("#table_Data")).getText();
+
+        
+        String sCadena = rowTable;
+        char[] aCaracteres = sCadena.toCharArray();
+        int conter = 0;
+        for(char l :  aCaracteres) {
+        	if(l == '\n') {
+        		conter = conter + 1;
+        	}
+        }
+        
+        numero = conter;
+        
+        Logan.defaultLog("Numero de usuarios " + numero);
+		return numero;
+		
+	}
+	
+	public static String tablaGestionDeptosVarFam4505ac(WebDriver driver) {
+		//100% funcional 
+        driver.switchTo().defaultContent();
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(3)")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(2)")));
+        
+        String rowTable  = driver.findElement(By.cssSelector("#table_Data")).getText();
+        
+        Logan.defaultLog("Se accedio al contador de Gestion de Departamentos");
+        return rowTable;
+	}
+	
+	
+	public static String nombreGestionDeptosFam4505ac(WebDriver driver, int num) {
+		//100% funcional 
+        driver.switchTo().defaultContent();
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(3)")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(2)")));
+        														 //#table_Data > tbody > tr:nth-child(     1     ) > td.tblPaging.dataTableColumn.link > span 4508a
+        String nombreUsuario  = driver.findElement(By.cssSelector("#table_Data > tbody > tr:nth-child(" + num + ") > td.tblPaging.dataTableColumn.link > span")).getText();
+
+        return nombreUsuario;
+	}
+	
+	public static long contadorGestionDeptosVarFam4505ac(WebDriver driver, int num) {
+		//100% funcional 
+        driver.switchTo().defaultContent();
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(3)")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(2)")));
+        
+        														 
+        String contadorUsuario  = driver.findElement(By.cssSelector("#table_Data > tbody > tr:nth-child(" + num + ") > td:nth-child(4) > span")).getText();
+        
+        Logan.defaultLog("Numero de usuarios " + contadorUsuario);
+        return Long.parseLong(contadorUsuario);
+	}
+	
+	
+	public static void tablaGestionDeptosFor4505ac(WebDriver driver) {
+		  
+        driver.switchTo().defaultContent();
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(3)")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(2)")));
+        
+        
+		Logan.defaultLog("Se accedio al contador de Gestion de Departamentos");
+	}
+	
+	
+	public static void seleccionarDepartamentoFam4505ac(WebDriver driver, int num) {
+		//100% funcional - en esta familia los departamentos inician desde el 1 
+        driver.switchTo().defaultContent();
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(3)")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(2)")));
+        														   
+
+        driver.findElement(By.cssSelector("#table_Data > tbody > tr:nth-child(" + num +  ") > td.tblPaging.dataTableColumn.link > span")).click();
+        Set<String> handlesSet = driver.getWindowHandles();
+        List<String> handlesList = new ArrayList<String>(handlesSet);
+        driver.switchTo().window(handlesList.get(1));
+        //driver.close();
+	}
+	
+	
+	public static void seleccionarDepartamentoFam2505ac(WebDriver driver, int num) {
+
+        try {
+			Thread.sleep(3);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        driver.switchTo().defaultContent();
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(3)")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(2)")));
+        														   
+
+        driver.findElement(By.cssSelector("#table_Data > tbody > tr:nth-child(" + num +  ") > td.tblPaging.dataTableColumn.link > span")).click();
+        Set<String> handlesSet = driver.getWindowHandles();
+        List<String> handlesList = new ArrayList<String>(handlesSet);
+        driver.switchTo().window(handlesList.get(1));
+      
+        try {
+			Thread.sleep(3);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public static long [] contadorGeneralFam4508a(WebDriver driver) {
+		//Devuelve un arreglo long con el contador
+		long contador [] = null;
+		contador = new long[3];
+		
+        driver.switchTo().defaultContent();
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(3)")));
+        														   
+       String negro =  driver.findElement(By.cssSelector("#Print_Total_TotalCounter_Black")).getText();
+       String total = driver.findElement(By.cssSelector("#Print_Total_TotalCounter_Total")).getText();
+       
+
+       contador[0] = Long.parseLong(negro);
+       contador[1] = Long.parseLong(total);
+       
+     Logan.defaultLog("Se extrajeron los contadores");
+	return contador;
+	}
+	
+	public static long [] contadorGeneralFam4505ac(WebDriver driver) {
+		//Devuelve un arreglo long con el contador
+		long contador [] = null;
+		contador = new long[4];
+		
+		
+        driver.switchTo().defaultContent();
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(3)")));
+       // driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(2)")));
+        														   
+
+       String color = driver.findElement(By.cssSelector("#Print_Total_TotalCounter_Full")).getText();
+       String bicolor = driver.findElement(By.cssSelector("#Print_Total_TotalCounter_Twin")).getText();
+       String negro =  driver.findElement(By.cssSelector("#Print_Total_TotalCounter_Black")).getText();
+       String total = driver.findElement(By.cssSelector("#Print_Total_TotalCounter_Total")).getText();
+       
+       contador[0] = Long.parseLong(color);
+       contador[1] = Long.parseLong(bicolor);
+       contador[2] = Long.parseLong(negro);
+       contador[3] = Long.parseLong(total);
+       
+       Logan.defaultLog("Se extrajeron los contadores");
+	return contador;
+	}
+	
+	public static long [] contadorGeneralFam5(WebDriver driver) {
+		//Devuelve un arreglo long con el contador 100%
+		long contador [] = null;
+		contador = new long[4];
+		
+		try {
+			Thread.sleep(5);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+        driver.switchTo().defaultContent();
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(3)")));
+       // driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(2)")));
+        														   
+
+       String color = driver.findElement(By.cssSelector("#TotalFullColor")).getText();
+       String bicolor = driver.findElement(By.cssSelector("#TotalTwoColor")).getText();
+       String negro =  driver.findElement(By.cssSelector("#TotalBlackColor")).getText();
+       
+       
+       contador[0] = Long.parseLong(color);
+       contador[1] = Long.parseLong(bicolor);
+       contador[2] = Long.parseLong(negro);
+       Long total = Long.parseLong(color) + Long.parseLong(bicolor) + Long.parseLong(negro);
+       contador[3] = total;
+       Logan.defaultLog("Se extrajeron los contadores");
+       
+	return contador;
+	}
+	
+	public static void screenShotWeb(WebDriver driver, String ruta, String nombre) {
+        String path = null;
+        try {
+        	driver.manage().window().maximize();
+            WebDriver augmentedDriver = new Augmenter().augment(driver);
+            File source = ((TakesScreenshot)augmentedDriver).getScreenshotAs(OutputType.FILE);
+            path = ruta + "\\" + nombre + "_"  + source.getName();
+            FileUtils.copyFile(source, new File(path)); 
+        }
+        catch(IOException e) {
+            path = "Failed to capture screenshot: " + e.getMessage();
+        }
+        
+        try {
+   			Thread.sleep(5000);
+   		} catch (InterruptedException e) {
+   			// TODO Auto-generated catch block
+   			
+   			e.printStackTrace();
+   		}
+	}
+	
+	
+	public static void resetContadorFam5(WebDriver driver) {
+		//FUNCIONA LUEGO DE USAR METODO TOOLSWEB.seleccionarDepartamento
+        driver.findElement(By.cssSelector("body > form > input[type=button]:nth-child(21)")).click();
+        Alert alt = driver.switchTo().alert();
+        alt.accept();
+        Logan.defaultLog("Contador reseteado");
+	}
+	
+	public static void resetContadorFam4505ac(WebDriver driver) {
+		//FUNCIONA LUEGO DE USAR METODO TOOLSWEB.seleccionarDepartamento
+        driver.findElement(By.cssSelector("body > form > input:nth-child(21)")).click();
+        Alert alt = driver.switchTo().alert();
+        alt.accept();
+        Logan.defaultLog("Contador reseteado");
+	}
+	
+	public static String  contadorDeptoGestionInside(WebDriver driver) {
+		//FUNCIONA LUEGO DE USAR METODO TOOLSWEB.seleccionarDepartamento
+        // obtiene el contador total de ese usuario en una variable - 100% funcional
+		
+        String contadorUsuario =  driver.findElement(By.cssSelector("body > form > table:nth-child(28) > tbody")).getText();
+        //JOptionPane.showMessageDialog(null, contadorUsuario);
+        return contadorUsuario;
+        
+	}
+	
+	public static String obtenerUbicacion(WebDriver driver) {
+		String ubicacion = null;
+		
+		driver.switchTo().defaultContent();
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(3)")));
+        ubicacion = driver.findElement(By.cssSelector("#DeviceLocation")).getText();
+        
+        int tempCont = 0;
+        
+        while(ubicacion.equals("") & tempCont < 11) {
+        	if(tempCont == 0) {
+        		timeUp(3);		
+        	}
+        	ubicacion = driver.findElement(By.cssSelector("#DeviceLocation")).getText();
+        	tempCont ++;
+        }
+        
+        if (ubicacion.equals("")) {
+        	ubicacion = "sin ubicacion";
+        }
+        
+		return ubicacion;
+	}
+	
+	
+	
+	public static String obtenerModelo(WebDriver driver) {
+		String modelo = null;
+		
+		driver.switchTo().defaultContent();
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+        driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(3)")));
+        modelo = driver.findElement(By.cssSelector("#DeviceCopierModel")).getText();
+
+        if (modelo.equals("")) {
+        	modelo = "sin modelo";
+        }
+        
+		return modelo;
+	}
+	
+	
+	public static String obtenerSerie(WebDriver driver) {
+		String serie = null;
+		
+		driver.switchTo().defaultContent();
+		driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame")));
+		driver.switchTo().frame(driver.findElement(By.cssSelector("html > frameset > frame:nth-child(3)")));
+		serie = driver.findElement(By.cssSelector("#DeviceSerialNumber")).getText();
+
+        if (serie.equals("")) {
+        	serie = "sin serie";
+        }
+        
+		return serie;
+	}
+	
+	public static long[] contadorBoxUsuarioFam5(WebDriver driver) {
+		long [] conter = new long[4];
+		String user  = driver.findElement(By.cssSelector("#DepartmentName")).getAttribute("value");
+		
+		String  color = driver.findElement(By.cssSelector("#TotalFullColor")).getText();//0
+		String  bicolor = driver.findElement(By.cssSelector("#TotalTwoColor")).getText();//1
+		String  negro = driver.findElement(By.cssSelector("#TotalBlackColor")).getText();//2
+		String  total = driver.findElement(By.cssSelector("#TotalPrinting")).getText();//3
+		
+		conter[0] = Long.parseLong(color);
+		conter[1] = Long.parseLong(bicolor);
+		conter[2] = Long.parseLong(negro);
+		conter[3] = Long.parseLong(total);
+		
+		//System.out.println(color + " " + bicolor + "  " + negro + " " + total);
+		Logan.defaultLog("Contadores de  " + user + " extraidos con exito");
+		return conter;
+	}
+	
+	public static long[] contadorBoxUsuarioFam4505ac(WebDriver driver) {
+		long [] conter = new long[4];
+		String user  = driver.findElement(By.cssSelector("#DepartmentName")).getAttribute("value");
+		
+		String  color = driver.findElement(By.cssSelector("#Print_Total_TotalCounter_Full")).getText();//0
+		String  bicolor = driver.findElement(By.cssSelector("#Print_Total_TotalCounter_Twin")).getText();//1
+		String  negro = driver.findElement(By.cssSelector("#Print_Total_TotalCounter_Black")).getText();//2
+		String  total = driver.findElement(By.cssSelector("#Print_Total_TotalCounter_Total")).getText();//3
+		
+		conter[0] = Long.parseLong(color);
+		conter[1] = Long.parseLong(bicolor);
+		conter[2] = Long.parseLong(negro);
+		conter[3] = Long.parseLong(total);
+		
+		//System.out.println(color + " " + bicolor + "  " + negro + " " + total);
+		Logan.defaultLog("Contadores de  " + user + " extraidos con exito");
+		return conter;
+	}
+	
+	public static long[] contadorBoxUsuarioFam4508a(WebDriver driver) {
+		long [] conter = new long[3];
+		String user  = driver.findElement(By.cssSelector("#DepartmentName")).getAttribute("value");
+		
+		String  negro = driver.findElement(By.cssSelector("#Print_Total_TotalCounter_Black")).getText();//0
+		String  total = driver.findElement(By.cssSelector("#Print_Total_TotalCounter_Total")).getText();//1
+
+		conter[0] = Long.parseLong(negro);
+		conter[1] = Long.parseLong(total);
+		
+		//System.out.println(color + " " + bicolor + "  " + negro + " " + total);
+		Logan.defaultLog("Contadores de  " + user + " extraidos con exito");
+		return conter;
+	}
+}
